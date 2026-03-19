@@ -1,7 +1,9 @@
 <div align="center">
 
 # Hi there, I'm Zhou Huimin
+
 Undergraduate in Computer Science and Technology 
+
 School of Information Science and Technology, Hangzhou Normal University
 
 <br>
