@@ -1,16 +1,20 @@
-## Hi there 👋
+<div align="center">
 
-<!--
-**zhouhuimin0111-hash/zhouhuimin0111-hash** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+# Hi there, I'm Zhou Huimin
+(你好，我是周慧敏)
 
-Here are some ideas to get you started:
+Undergraduate in Computer Science and Technology 
+(计算机科学与技术专业本科生)
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+School of Information Science and Technology, Hangzhou Normal University
+(杭州师范大学信息科学与技术学院)
+
+<br>
+
+<a href="mailto:zhouhuimin0111@gmail.com"><img src="https://img.shields.io/badge/EMAIL-CONTACT-red?style=for-the-badge&logo=gmail"></a>
+<a href="https://github.com/ZhouHuimin0111"><img src="https://img.shields.io/badge/GITHUB-FOLLOW-black?style=for-the-badge&logo=github"></a>
+
+</div>
+
+<br>
+
