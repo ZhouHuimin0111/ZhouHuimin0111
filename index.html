@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>周慧敏 · 个人主页</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
+  <style>
+    :root {
+      --bg:        #f6f4f0;
+      --bg2:       #ffffff;
+      --bg3:       #efece6;
+      --bg4:       #e8e4dc;
+      --ink:       #171614;
+      --ink2:      #3d3b37;
+      --ink3:      #7a776f;
+      --ink4:      #b0ada5;
+      --accent:    #2a5c45;
+      --accent2:   #3d8b6a;
+      --accent3:   #d4ede2;
+      --line:      #e2dfd8;
+      --line2:     #f0ede8;
+      --serif:     'Noto Serif SC', serif;
+      --sans:      'Noto Sans SC', sans-serif;
+      --mono:      'DM Mono', monospace;
+      --r:         10px;
+      --shadow:    0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.06);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 15px; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.75; min-height: 100vh; }
+
+    /* Layout */
+    .layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--bg2); border-right: 1px solid var(--line); display: flex; flex-direction: column; }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+
+    .profile { padding: 48px 32px 32px; display: flex; flex-direction: column; align-items: center; text-align: center; border-bottom: 1px solid var(--line2); position: relative; }
+    .profile::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 80px; background: linear-gradient(135deg, #e8f5ee 0%, #f0f7f4 50%, #edf4f8 100%); }
+
+    .avatar-ring { position: relative; z-index: 1; width: 96px; height: 96px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, var(--accent2), #6dbf9e); box-shadow: var(--shadow-lg); }
+    .avatar-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 2px solid var(--bg2); }
+    .avatar-ring .avatar-fb { width: 100%; height: 100%; border-radius: 50%; background: var(--bg3); display: none; align-items: center; justify-content: center; font-size: 36px; border: 2px solid var(--bg2); }
+
+    .name { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--ink); margin-top: 16px; letter-spacing: .02em; }
+    .school { font-size: 12px; color: var(--ink3); margin-top: 4px; letter-spacing: .04em; }
+
+    .status-badge { display: inline-flex; align-items: center; gap: 5px; margin-top: 12px; font-size: 11px; font-family: var(--mono); color: var(--accent); background: var(--accent3); border-radius: 20px; padding: 3px 10px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(.85); } }
+
+    .meta-section { padding: 22px 28px; border-bottom: 1px solid var(--line2); }
+    .meta-label { font-size: 10px; font-family: var(--mono); color: var(--ink4); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 12px; }
+    .meta-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .meta-list li { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink2); }
+    .meta-icon { width: 16px; height: 16px; flex-shrink: 0; color: var(--accent2); }
+    .meta-list a { color: var(--ink2); text-decoration: none; transition: color .2s; }
+    .meta-list a:hover { color: var(--accent); }
+
+    .skills-section { padding: 20px 28px; border-bottom: 1px solid var(--line2); }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .tag { font-size: 11px; font-family: var(--mono); background: var(--bg3); color: var(--ink3); border: 1px solid var(--line); border-radius: 5px; padding: 3px 9px; transition: all .2s; cursor: default; }
+    .tag:hover { background: var(--accent3); color: var(--accent); border-color: transparent; }
+
+    .nav-section { padding: 16px 16px; margin-top: auto; }
+    .nav-link { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink3); text-decoration: none; padding: 9px 12px; border-radius: 8px; transition: all .2s; font-weight: 300; }
+    .nav-link:hover { background: var(--bg3); color: var(--ink); }
+    .nav-link.active { background: var(--accent3); color: var(--accent); font-weight: 400; }
+    .nav-icon { width: 15px; height: 15px; flex-shrink: 0; opacity: .7; }
+
+    /* Main */
+    .main { padding: 52px 60px 80px; }
+
+    /* Section */
+    .section { margin-bottom: 72px; }
+    .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; }
+    .section-accent { width: 3px; height: 26px; background: linear-gradient(to bottom, var(--accent2), transparent); border-radius: 2px; flex-shrink: 0; }
+    .section-title { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); }
+    .section-divider { flex: 1; height: 1px; background: var(--line); }
+
+    /* GitHub */
+    .github-card { background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; padding: 28px 28px 20px; box-shadow: var(--shadow); }
+    .github-heatmap { overflow-x: auto; margin-bottom: 20px; }
+    .github-heatmap img { width: 100%; min-width: 560px; height: auto; display: block; border-radius: 6px; }
+    .github-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .stat-card { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 16px 12px; text-align: center; transition: border-color .2s; }
+    .stat-card:hover { border-color: var(--accent3); }
+    .stat-num { font-family: var(--mono); font-size: 22px; font-weight: 500; color: var(--accent); letter-spacing: -.02em; }
+    .stat-label { font-size: 11.5px; color: var(--ink3); margin-top: 4px; }
+
+    /* Notes */
+    .upload-zone { background: var(--bg2); border: 1.5px dashed var(--line); border-radius: 14px; padding: 40px 20px; text-align: center; cursor: pointer; transition: all .25s; margin-bottom: 24px; }
+    .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent2); background: #f2faf6; }
+    .upload-icon-wrap { width: 52px; height: 52px; background: var(--bg3); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 22px; transition: background .2s; }
+    .upload-zone:hover .upload-icon-wrap { background: var(--accent3); }
+    .upload-zone p { font-size: 13.5px; color: var(--ink3); }
+    .upload-zone strong { color: var(--accent); font-weight: 500; }
+
+    .note-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 14px; }
+    .note-card { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 20px 18px; cursor: pointer; transition: all .2s; position: relative; overflow: hidden; }
+    .note-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, var(--accent2), #6dbf9e); transform: scaleX(0); transition: transform .2s; }
+    .note-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+    .note-card:hover::after { transform: scaleX(1); }
+    .note-type { font-size: 10px; font-family: var(--mono); color: var(--ink4); letter-spacing: .08em; margin-bottom: 8px; }
+    .note-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 8px; line-height: 1.4; }
+    .note-meta { font-size: 11px; font-family: var(--mono); color: var(--ink4); }
+    .note-delete { position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer; color: var(--ink4); font-size: 14px; opacity: 0; transition: opacity .2s, color .2s; padding: 2px; line-height: 1; }
+    .note-card:hover .note-delete { opacity: 1; }
+    .note-delete:hover { color: #c0392b; }
+
+    /* Feed */
+    .feed { display: flex; flex-direction: column; }
+    .feed-item { display: grid; grid-template-columns: 64px 1fr; gap: 0 22px; position: relative; }
+    .feed-item:not(:last-child) .feed-body { margin-bottom: 20px; }
+    .feed-item:not(:last-child)::after { content: ''; position: absolute; left: 60px; top: 32px; bottom: -20px; width: 1px; background: linear-gradient(to bottom, var(--line), transparent); }
+    .feed-date-col { display: flex; flex-direction: column; align-items: flex-end; padding-top: 14px; }
+    .feed-date-day { font-family: var(--mono); font-size: 13px; color: var(--ink); font-weight: 500; line-height: 1; }
+    .feed-date-month { font-family: var(--mono); font-size: 10px; color: var(--ink4); margin-top: 2px; }
+    .feed-body { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; position: relative; transition: box-shadow .2s; }
+    .feed-body:hover { box-shadow: var(--shadow); }
+    .feed-node { position: absolute; left: -30px; top: 14px; width: 10px; height: 10px; background: var(--bg2); border: 2px solid var(--accent2); border-radius: 50%; }
+    .feed-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 8px; }
+    .feed-tag { font-size: 10px; font-family: var(--mono); color: var(--accent); background: var(--accent3); border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
+    .feed-title { font-size: 14px; font-weight: 500; color: var(--ink); flex: 1; }
+    .feed-delete { background: none; border: none; cursor: pointer; color: var(--ink4); font-size: 13px; opacity: 0; transition: opacity .2s, color .2s; padding: 2px; flex-shrink: 0; }
+    .feed-body:hover .feed-delete { opacity: 1; }
+    .feed-delete:hover { color: #c0392b; }
+    .feed-content { font-size: 13.5px; color: var(--ink2); line-height: 1.7; }
+
+    .new-post-btn { margin-top: 28px; width: 100%; background: none; border: 1.5px dashed var(--line); border-radius: 10px; padding: 12px; font-size: 13px; color: var(--ink3); font-family: var(--sans); cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .new-post-btn:hover { border-color: var(--accent2); color: var(--accent); background: #f2faf6; }
+
+    /* Roadmap — vertical text timeline */
+    .roadmap-wrap {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 36px 40px 40px;
+      box-shadow: var(--shadow);
+    }
+
+    /* ── The vertical line ── */
+    .vtl {
+      position: relative;
+      padding-left: 28px;       /* space for line + dot */
+    }
+    .vtl::before {
+      content: '';
+      position: absolute;
+      left: 5px;                /* centre of the 10px dot */
+      top: 6px;
+      bottom: 6px;
+      width: 1.5px;
+      background: linear-gradient(to bottom, #3d8b6a 0%, #b0d9c4 100%);
+      border-radius: 2px;
+    }
+
+    /* ── Each timeline row ── */
+    .vtl-item {
+      position: relative;
+      padding: 0 0 32px 20px;
+    }
+    .vtl-item:last-child { padding-bottom: 0; }
+
+    /* Status dot on the line */
+    .vtl-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 2px solid var(--bg2);
+      box-shadow: 0 0 0 1.5px #a8cdb8;
+      background: #d4ede2;      /* default: todo */
+      z-index: 1;
+    }
+    .vtl-item.done::before  { background: #2a5c45; box-shadow: 0 0 0 1.5px #1b4232; }
+    .vtl-item.doing::before { background: #3d8b6a; box-shadow: 0 0 0 2.5px rgba(61,139,106,.25), 0 0 0 1.5px #2a5c45; }
+    .vtl-item.todo::before  { background: #d4ede2; box-shadow: 0 0 0 1.5px #a8cdb8; }
+
+    /* Date chip */
+    .vtl-date {
+      display: inline-block;
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--accent);
+      background: var(--accent3);
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-bottom: 6px;
+      letter-spacing: .03em;
+    }
+
+    /* Event title */
+    .vtl-title {
+      font-size: 14.5px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    /* Optional description */
+    .vtl-desc {
+      font-size: 13px;
+      color: var(--ink3);
+      line-height: 1.7;
+    }
+
+    /* "Future" ghost item at the bottom */
+    .vtl-item.future::before {
+      background: var(--bg3);
+      border: 1.5px dashed #b0cfc0;
+      box-shadow: none;
+    }
+    .vtl-item.future .vtl-date { color: var(--ink4); background: var(--bg3); }
+    .vtl-item.future .vtl-title { color: var(--ink4); font-weight: 300; }
+
+    /* Roadmap add-node button */
+    .rm-add-btn {
+      width: 100%; background: none;
+      border: 1.5px dashed var(--line);
+      border-radius: 10px; padding: 11px;
+      font-size: 13px; color: var(--ink3);
+      font-family: var(--sans); cursor: pointer;
+      transition: all .2s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: 20px;
+    }
+    .rm-add-btn:hover { border-color: var(--accent2); color: var(--accent); background: #f2faf6; }
+
+    /* delete button on dynamic vtl-items */
+    .vtl-delete {
+      background: none; border: none; cursor: pointer;
+      color: var(--ink4); font-size: 13px;
+      opacity: 0; transition: opacity .2s, color .2s;
+      padding: 0 2px; float: right; margin-top: 1px;
+    }
+    .vtl-item:hover .vtl-delete { opacity: 1; }
+    .vtl-delete:hover { color: #c0392b; }
+
+    /* Modals */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(23,22,20,.45); backdrop-filter: blur(6px); z-index: 200; align-items: flex-start; justify-content: center; padding: 48px 20px; }
+    .overlay.open { display: flex; animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    .modal { background: var(--bg2); border-radius: 16px; width: 100%; max-width: 780px; max-height: 86vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 24px 64px rgba(0,0,0,.18); animation: slideUp .25s ease; }
+    .modal-sm { max-width: 540px; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 22px 28px; border-bottom: 1px solid var(--line2); flex-shrink: 0; }
+    .modal-title { font-family: var(--serif); font-size: 18px; font-weight: 600; }
+    .modal-close { width: 28px; height: 28px; background: var(--bg3); border: none; border-radius: 50%; cursor: pointer; color: var(--ink3); font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+    .modal-close:hover { background: var(--line); color: var(--ink); }
+    .modal-body { padding: 28px; overflow-y: auto; flex: 1; }
+
+    /* Markdown */
+    .md-content { color: var(--ink2); }
+    .md-content h1 { font-family: var(--serif); font-size: 24px; font-weight: 600; color: var(--ink); margin: 0 0 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .md-content h2 { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--ink); margin: 28px 0 10px; }
+    .md-content h3 { font-size: 15px; font-weight: 500; color: var(--ink); margin: 20px 0 8px; }
+    .md-content p { margin-bottom: 14px; line-height: 1.8; }
+    .md-content ul, .md-content ol { padding-left: 1.5em; margin-bottom: 14px; }
+    .md-content li { margin-bottom: 4px; }
+    .md-content code { font-family: var(--mono); font-size: 13px; background: var(--bg3); color: var(--accent); border-radius: 4px; padding: 1px 6px; }
+    .md-content pre { background: #1c1b19; border-radius: 10px; padding: 18px 22px; overflow-x: auto; margin: 16px 0; }
+    .md-content pre code { background: none; color: #a8d5bc; padding: 0; font-size: 13px; }
+    .md-content blockquote { border-left: 3px solid var(--accent2); padding: 10px 18px; margin: 16px 0; background: var(--bg3); border-radius: 0 8px 8px 0; color: var(--ink3); }
+    .md-content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13.5px; }
+    .md-content th { background: var(--bg3); padding: 10px 14px; text-align: left; font-weight: 500; border-bottom: 1px solid var(--line); }
+    .md-content td { padding: 10px 14px; border-bottom: 1px solid var(--line2); }
+    .md-content a { color: var(--accent); }
+
+    /* Forms */
+    .form-group { margin-bottom: 16px; }
+    .form-label { font-size: 11px; color: var(--ink3); font-family: var(--mono); letter-spacing: .08em; display: block; margin-bottom: 7px; text-transform: uppercase; }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; background: var(--bg); color: var(--ink); font-family: var(--sans); font-weight: 300; outline: none; transition: border-color .2s; -webkit-appearance: none; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent2); background: var(--bg2); }
+    .form-textarea { resize: vertical; line-height: 1.7; min-height: 110px; }
+    .btn-primary { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 11px; font-size: 14px; font-family: var(--sans); font-weight: 400; cursor: pointer; transition: opacity .2s; margin-top: 4px; }
+    .btn-primary:hover { opacity: .88; }
+
+
+
+    /* Project section */
+    .proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+
+    .proj-card {
+      background: var(--bg2); border: 1px solid var(--line);
+      border-radius: 12px; padding: 20px 22px;
+      display: flex; flex-direction: column; gap: 10px;
+      position: relative; transition: box-shadow .2s, transform .15s;
+    }
+    .proj-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .proj-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; border-radius: 0 0 12px 12px;
+      background: linear-gradient(to right, var(--accent2), #6dbf9e);
+      transform: scaleX(0); transition: transform .2s;
+    }
+    .proj-card:hover::after { transform: scaleX(1); }
+
+    .proj-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+
+    .proj-name {
+      font-size: 15px; font-weight: 500; color: var(--ink);
+      text-decoration: none; line-height: 1.35;
+    }
+    a.proj-name:hover { color: var(--accent); }
+
+    .proj-status {
+      font-size: 10.5px; font-family: var(--mono);
+      padding: 2px 8px; border-radius: 20px;
+      white-space: nowrap; flex-shrink: 0; margin-top: 2px;
+    }
+    .proj-status.active  { background: #e0f5eb; color: #2a5c45; }
+    .proj-status.done    { background: var(--bg3); color: var(--ink3); }
+    .proj-status.paused  { background: #fef3e2; color: #8a6020; }
+
+    .proj-desc { font-size: 13px; color: var(--ink3); line-height: 1.7; }
+
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+    .proj-tag {
+      font-size: 11px; font-family: var(--mono);
+      background: var(--bg3); color: var(--ink3);
+      border: 1px solid var(--line); border-radius: 4px;
+      padding: 2px 7px;
+    }
+
+    .proj-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--line2);
+    }
+    .proj-date { font-size: 11px; font-family: var(--mono); color: var(--ink4); }
+    .proj-link {
+      font-size: 12px; color: var(--accent); text-decoration: none;
+      font-family: var(--mono); display: flex; align-items: center; gap: 3px;
+    }
+    .proj-link:hover { text-decoration: underline; }
+
+    .proj-delete {
+      position: absolute; top: 10px; right: 10px;
+      background: none; border: none; cursor: pointer;
+      color: var(--ink4); font-size: 13px;
+      opacity: 0; transition: opacity .2s, color .2s; padding: 2px;
+    }
+    .proj-card:hover .proj-delete { opacity: 1; }
+    .proj-delete:hover { color: #c0392b; }
+
+    .proj-add-btn {
+      width: 100%; background: none;
+      border: 1.5px dashed var(--line); border-radius: 10px; padding: 11px;
+      font-size: 13px; color: var(--ink3); font-family: var(--sans);
+      cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: 16px;
+    }
+    .proj-add-btn:hover { border-color: var(--accent2); color: var(--accent); background: #f2faf6; }
+
+    /* About Me */
+    .about-card { display: grid; grid-template-columns: 120px 1fr; gap: 36px; background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; padding: 36px; box-shadow: var(--shadow); align-items: flex-start; }
+    .about-avatar { width: 108px; height: 108px; border-radius: 50%; object-fit: cover; border: 3px solid var(--bg2); box-shadow: 0 0 0 3px var(--accent3), var(--shadow-lg); display: block; margin: 0 auto; }
+    .about-content { display: flex; flex-direction: column; gap: 14px; }
+    .about-greeting { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--ink); }
+    .about-greeting strong { color: var(--accent); }
+    .about-bio { font-size: 14.5px; color: var(--ink2); line-height: 1.85; }
+    .about-bio strong { color: var(--ink); font-weight: 500; }
+    .about-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .about-tag { font-size: 12px; background: var(--bg3); color: var(--ink2); border: 1px solid var(--line); border-radius: 20px; padding: 4px 12px; font-family: var(--sans); transition: all .2s; }
+    .about-tag:hover { background: var(--accent3); border-color: transparent; color: var(--accent); }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; }
+      .main { padding: 32px 24px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+    <div class="profile">
+      <div class="avatar-ring">
+        <img
+          src="https://avatars.githubusercontent.com/ZhouHuimin0111"
+          alt="周慧敏"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+        />
+        <div class="avatar-fb">👩‍💻</div>
+      </div>
+      <div class="name">周慧敏</div>
+      <div class="school">杭州师范大学 · 计算机科学与技术</div>
+      <div class="status-badge"><div class="status-dot"></div>求职中</div>
+    </div>
+
+    <div class="meta-section">
+      <div class="meta-label">联系方式</div>
+      <ul class="meta-list">
+        <li>
+          <svg class="meta-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          杭州，浙江
+        </li>
+        <li>
+          <svg class="meta-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <a href="mailto:zhouhuimin0111@gmail.com">zhouhuimin0111@gmail.com</a>
+        </li>
+        <li>
+          <svg class="meta-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.29 9.42 7.86 10.95.58.1.79-.25.79-.56 0-.28-.01-1.02-.01-2C6 21.16 5.24 19.25 5.24 19.25c-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.57-.29-5.27-1.28-5.27-5.72 0-1.26.45-2.3 1.19-3.11-.12-.29-.52-1.47.11-3.07 0 0 .97-.31 3.18 1.19a11.05 11.05 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.5 3.17-1.19 3.17-1.19.63 1.6.23 2.78.11 3.07.74.81 1.19 1.85 1.19 3.11 0 4.45-2.7 5.43-5.28 5.71.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.2.67.8.56C20.21 21.42 23.5 17.1 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+          <a href="https://github.com/ZhouHuimin0111" target="_blank">ZhouHuimin0111</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="skills-section">
+      <div class="meta-label">技能栈</div>
+      <div class="tag-row">
+        <span class="tag">Python</span>
+        <span class="tag">Java</span>
+        <span class="tag">C/C++</span>
+        <span class="tag">Linux</span>
+        <span class="tag">Git</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">数据结构</span>
+        <span class="tag">算法</span>
+      </div>
+    </div>
+
+    <nav class="nav-section">
+      <a class="nav-link" href="#about">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        关于我
+      </a>
+      <a class="nav-link" href="#github">
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.29 9.42 7.86 10.95.58.1.79-.25.79-.56 0-.28-.01-1.02-.01-2C6 21.16 5.24 19.25 5.24 19.25c-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.57-.29-5.27-1.28-5.27-5.72 0-1.26.45-2.3 1.19-3.11-.12-.29-.52-1.47.11-3.07 0 0 .97-.31 3.18 1.19a11.05 11.05 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.5 3.17-1.19 3.17-1.19.63 1.6.23 2.78.11 3.07.74.81 1.19 1.85 1.19 3.11 0 4.45-2.7 5.43-5.28 5.71.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.2.67.8.56C20.21 21.42 23.5 17.1 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+        GitHub 数据
+      </a>
+      <a class="nav-link" href="#projects">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        项目经历
+      </a>
+      <a class="nav-link" href="#roadmap">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        学习路线
+      </a>
+      <a class="nav-link" href="#feed">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        学习动态
+      </a>
+      <a class="nav-link" href="#notes">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        学习笔记
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <main class="main">
+
+    <!-- About Me -->
+    <section class="section" id="about">
+      <div class="section-header">
+        <div class="section-accent"></div>
+        <h2 class="section-title">关于我</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="about-card">
+        <div class="about-avatar-col">
+          <img
+            src="https://avatars.githubusercontent.com/ZhouHuimin0111"
+            alt="周慧敏"
+            class="about-avatar"
+            onerror="this.style.display='none'"
+          />
+        </div>
+        <div class="about-content">
+          <p class="about-greeting">👋 你好，我是 <strong>周慧敏</strong></p>
+          <p class="about-bio">
+            杭州师范大学计算机科学与技术专业<strong>大一在读学生</strong>，对计算机充满热情，入学以来一直保持大量自主学习的习惯。目前专注于夯实编程基础，系统学习
+            <strong>算法与数据结构</strong>，并深入探索 <strong>Java 后端开发</strong>方向。
+          </p>
+          <p class="about-bio">
+            我相信扎实的基础是一切的前提，坚持每天刷题、整理笔记、动手实践。
+            目标是在校期间积累足够的技术深度，未来投身于
+            <strong>后端开发</strong>领域，期待与志同道合的人交流学习 🤝
+          </p>
+          <div class="about-tags">
+            <span class="about-tag">🎓 大一在读</span>
+            <span class="about-tag">📍 杭州师范大学</span>
+            <span class="about-tag">🔭 后端开发方向</span>
+            <span class="about-tag">⚡ 热爱算法</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GitHub -->
+    <section class="section" id="github">
+      <div class="section-header">
+        <div class="section-accent"></div>
+        <h2 class="section-title">GitHub 数据</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="github-card">
+        <div class="github-heatmap" id="github-heatmap">
+          <div style="text-align:center;padding:20px;color:var(--ink4);font-size:13px;">加载贡献图中…</div>
+        </div>
+        <div class="github-stats">
+          <div class="stat-card"><div class="stat-num" id="stat-repos">—</div><div class="stat-label">公开仓库</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-followers">—</div><div class="stat-label">关注者</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-following">—</div><div class="stat-label">正在关注</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="section" id="projects">
+      <div class="section-header">
+        <div class="section-accent"></div>
+        <h2 class="section-title">项目经历</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="proj-grid" id="proj-grid"></div>
+      <button class="proj-add-btn" onclick="openProjModal()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        添加项目
+      </button>
+    </section>
+
+    <!-- Roadmap -->
+    <section class="section" id="roadmap">
+      <div class="section-header">
+        <div class="section-accent"></div>
+        <h2 class="section-title">学习路线</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="roadmap-wrap">
+        <!-- 排序工具栏 -->
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px;flex-wrap:wrap;">
+          <span style="font-size:11px;font-family:var(--mono);color:var(--ink4);letter-spacing:.06em;margin-right:4px;">排序</span>
+          <button id="rm-sort-manual" onclick="setRmSort('manual')"
+            style="font-size:12px;font-family:var(--mono);padding:3px 10px;border:1px solid var(--line);border-radius:5px;cursor:pointer;transition:all .15s;background:var(--accent3);color:var(--accent);font-weight:500;">
+            手动顺序
+          </button>
+          <button id="rm-sort-asc" onclick="setRmSort('asc')"
+            style="font-size:12px;font-family:var(--mono);padding:3px 10px;border:1px solid var(--line);border-radius:5px;cursor:pointer;transition:all .15s;background:none;color:var(--ink3);font-weight:300;">
+            时间正序 ↑
+          </button>
+          <button id="rm-sort-desc" onclick="setRmSort('desc')"
+            style="font-size:12px;font-family:var(--mono);padding:3px 10px;border:1px solid var(--line);border-radius:5px;cursor:pointer;transition:all .15s;background:none;color:var(--ink3);font-weight:300;">
+            时间倒序 ↓
+          </button>
+        </div>
+
+        <!-- 动态节点区域（由 JS 从 localStorage 渲染） -->
+        <div class="vtl" id="vtl-dynamic"></div>
+
+        <!-- 添加按钮 -->
+        <button class="rm-add-btn" onclick="openRoadmapModal()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          添加新的学习节点
+        </button>
+
+      </div><!-- /.roadmap-wrap -->
+    </section>
+
+    <!-- Feed -->
+    <section class="section" id="feed">
+      <div class="section-header">
+        <div class="section-accent"></div>
+        <h2 class="section-title">学习动态</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="feed" id="feed-list"></div>
+      <button class="new-post-btn" onclick="openPostModal()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        记录新的学习动态
+      </button>
+    </section>
+
+    <!-- Notes -->
+    <section class="section" id="notes">
+      <div class="section-header">
+        <div class="section-accent"></div>
+        <h2 class="section-title">学习笔记</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+        <div class="upload-icon-wrap">📄</div>
+        <p>点击或拖拽上传 <strong>.md 笔记文件</strong></p>
+        <p style="font-size:12px;margin-top:5px;color:var(--ink4);">支持 Markdown 格式，上传后即可预览渲染效果</p>
+        <input type="file" id="file-input" accept=".md" style="display:none" multiple />
+      </div>
+      <div class="note-grid" id="note-grid"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Note Modal -->
+<div class="overlay" id="note-overlay" onclick="if(event.target===this)closeNoteModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="note-modal-title">笔记预览</div>
+      <button class="modal-close" onclick="closeNoteModal()">✕</button>
+    </div>
+    <div class="modal-body"><div class="md-content" id="note-modal-content"></div></div>
+  </div>
+</div>
+
+<!-- Post Modal -->
+<div class="overlay" id="post-overlay" onclick="if(event.target===this)closePostModal()">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">记录学习动态</div>
+      <button class="modal-close" onclick="closePostModal()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:0;">
+      <div class="form-group">
+        <label class="form-label">分类标签</label>
+        <select class="form-select" id="post-tag">
+          <option>学习笔记</option><option>项目实践</option><option>学习心得</option>
+          <option>刷题记录</option><option>读书笔记</option><option>课程总结</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">标题</label>
+        <input class="form-input" id="post-title" type="text" placeholder="一句话概括这次的内容…" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">内容</label>
+        <textarea class="form-textarea" id="post-content" placeholder="记录你的学习过程、思考或收获…"></textarea>
+      </div>
+      <button class="btn-primary" onclick="submitPost()">发布动态</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DB = {
+  getNotes:  () => JSON.parse(localStorage.getItem('zhm_notes') || '[]'),
+  getPosts:  () => JSON.parse(localStorage.getItem('zhm_posts') || '[]'),
+  saveNotes: v  => localStorage.setItem('zhm_notes', JSON.stringify(v)),
+  savePosts: v  => localStorage.setItem('zhm_posts', JSON.stringify(v)),
+};
+
+/* GitHub */
+function initGitHub() {
+  const U = 'ZhouHuimin0111';
+  document.getElementById('github-heatmap').innerHTML = `
+    <img src="https://ghchart.rshah.org/2a5c45/${U}" alt="GitHub 贡献热力图"
+      style="width:100%;min-width:560px;height:auto;display:block;border-radius:6px;"
+      onerror="this.parentNode.innerHTML='<p style=\\'color:var(--ink4);font-size:13px;padding:12px;text-align:center;\\'>贡献图将在部署至 GitHub Pages 后自动显示真实数据</p>'"
+    />`;
+  fetch('https://api.github.com/users/' + U)
+    .then(r => r.json())
+    .then(d => {
+      document.getElementById('stat-repos').textContent     = d.public_repos ?? '—';
+      document.getElementById('stat-followers').textContent = d.followers ?? '—';
+      document.getElementById('stat-following').textContent = d.following ?? '—';
+    }).catch(() => {});
+}
+
+/* Notes */
+function renderNotes() {
+  const notes = DB.getNotes();
+  document.getElementById('note-grid').innerHTML = notes.map((n, i) => `
+    <div class="note-card" onclick="openNote(${i})">
+      <button class="note-delete" onclick="event.stopPropagation();deleteNote(${i})" title="删除">✕</button>
+      <div class="note-type">MARKDOWN</div>
+      <div class="note-title">${esc(n.name)}</div>
+      <div class="note-meta">${n.date}</div>
+    </div>`).join('');
+}
+
+document.getElementById('file-input').addEventListener('change', handleFiles);
+const zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragover'); handleFiles({ target: { files: e.dataTransfer.files } }); });
+
+function handleFiles(e) {
+  const files = [...e.target.files].filter(f => f.name.endsWith('.md'));
+  if (!files.length) return;
+  const notes = DB.getNotes(); let loaded = 0;
+  files.forEach(f => {
+    const r = new FileReader();
+    r.onload = ev => {
+      notes.push({ name: f.name.replace(/\.md$/, ''), content: ev.target.result, date: new Date().toLocaleDateString('zh-CN') });
+      if (++loaded === files.length) { DB.saveNotes(notes); renderNotes(); }
+    };
+    r.readAsText(f);
+  });
+}
+
+function openNote(i) {
+  const n = DB.getNotes()[i];
+  document.getElementById('note-modal-title').textContent = n.name;
+  document.getElementById('note-modal-content').innerHTML = marked.parse(n.content);
+  document.getElementById('note-overlay').classList.add('open');
+}
+function closeNoteModal() { document.getElementById('note-overlay').classList.remove('open'); }
+function deleteNote(i) {
+  if (!confirm('确认删除这篇笔记？')) return;
+  const n = DB.getNotes(); n.splice(i, 1); DB.saveNotes(n); renderNotes();
+}
+
+/* Feed */
+const DEFAULT_POSTS = [
+  { tag:'项目实践', title:'搭建了个人求职主页', content:'用纯 HTML + JS + ECharts 从零搭建了这个个人网站，掌握了 CSS Grid 布局、ECharts 图表配置和 localStorage 数据持久化。', date:'2025-03-19' },
+  { tag:'学习心得', title:'操作系统笔记整理完成', content:'整理了进程调度、内存管理、文件系统三个核心章节，对虚拟内存分页机制有了更清晰的认识，下一步攻克计算机网络。', date:'2025-03-10' },
+];
+
+function renderFeed() {
+  let posts = DB.getPosts();
+  if (!posts.length) { DB.savePosts(DEFAULT_POSTS); posts = DEFAULT_POSTS; }
+  document.getElementById('feed-list').innerHTML = posts.slice().reverse().map((p, ri) => {
+    const i = posts.length - 1 - ri;
+    const parts = p.date.split('-');
+    const day = parts[2] ?? p.date, ym = parts[0] && parts[1] ? parts[0] + '.' + parts[1] : '';
+    return `
+      <div class="feed-item">
+        <div class="feed-date-col">
+          <div class="feed-date-day">${day}</div>
+          <div class="feed-date-month">${ym}</div>
+        </div>
+        <div class="feed-body">
+          <div class="feed-node"></div>
+          <div class="feed-header">
+            <div class="feed-title">${esc(p.title)}</div>
+            <div class="feed-tag">${esc(p.tag)}</div>
+            <button class="feed-delete" onclick="deletePost(${i})" title="删除">✕</button>
+          </div>
+          <div class="feed-content">${esc(p.content)}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openPostModal() { document.getElementById('post-overlay').classList.add('open'); }
+function closePostModal() { document.getElementById('post-overlay').classList.remove('open'); }
+function submitPost() {
+  const title = document.getElementById('post-title').value.trim();
+  if (!title) { document.getElementById('post-title').focus(); return; }
+  const posts = DB.getPosts();
+  posts.push({ tag: document.getElementById('post-tag').value, title, content: document.getElementById('post-content').value.trim(), date: new Date().toISOString().split('T')[0] });
+  DB.savePosts(posts); renderFeed(); closePostModal();
+  document.getElementById('post-title').value = '';
+  document.getElementById('post-content').value = '';
+}
+function deletePost(i) {
+  if (!confirm('确认删除这条动态？')) return;
+  const p = DB.getPosts(); p.splice(i, 1); DB.savePosts(p); renderFeed();
+}
+
+/* Roadmap dynamic nodes */
+const RDB = {
+  get:  () => JSON.parse(localStorage.getItem('zhm_roadmap') || '[]'),
+  save: v  => localStorage.setItem('zhm_roadmap', JSON.stringify(v)),
+};
+
+// Current sort order: 'asc' | 'desc' | 'manual'
+let rmSortOrder = 'manual';
+
+// Parse a date string like "2025年6月" or "2025-06" into a sortable number
+function parseRmDate(str) {
+  if (!str) return Infinity;
+  // Try "2025年6月", "2025年6月15日"
+  const m = str.match(/(\d{4})[年\-\/](\d{1,2})/);
+  if (m) return parseInt(m[1]) * 100 + parseInt(m[2]);
+  // Try bare year "2025"
+  const y = str.match(/(\d{4})/);
+  if (y) return parseInt(y[1]) * 100;
+  return Infinity; // "待完成" etc. sort to end
+}
+
+function getSortedNodes() {
+  const nodes = RDB.get();
+  if (rmSortOrder === 'manual') return nodes.map((n, i) => ({ ...n, _orig: i }));
+  return [...nodes]
+    .map((n, i) => ({ ...n, _orig: i }))
+    .sort((a, b) => {
+      const da = parseRmDate(a.date), db = parseRmDate(b.date);
+      return rmSortOrder === 'asc' ? da - db : db - da;
+    });
+}
+
+function renderRoadmapNodes() {
+  const nodes = getSortedNodes();
+  const container = document.getElementById('vtl-dynamic');
+
+  // Update sort button states
+  ['manual','asc','desc'].forEach(o => {
+    const btn = document.getElementById('rm-sort-' + o);
+    if (btn) btn.style.fontWeight = rmSortOrder === o ? '500' : '300';
+    if (btn) btn.style.color = rmSortOrder === o ? 'var(--accent)' : 'var(--ink3)';
+    if (btn) btn.style.background = rmSortOrder === o ? 'var(--accent3)' : 'none';
+  });
+
+  if (!nodes.length) {
+    container.innerHTML = `<div style="color:var(--ink4);font-size:13px;padding:16px 0 8px;font-family:var(--mono);">还没有节点，点击下方按钮添加第一个里程碑 →</div>`;
+    return;
+  }
+
+  container.innerHTML = nodes.map(n => `
+    <div class="vtl-item ${esc(n.status)}">
+      <button class="vtl-delete" onclick="deleteRoadmapNode(${n._orig})" title="删除">✕</button>
+      <div class="vtl-date">${esc(n.date)}</div>
+      <div class="vtl-title">
+        ${n.link
+          ? `<a href="${esc(n.link)}" target="_blank" rel="noopener"
+               style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent3);padding-bottom:1px;"
+               onmouseover="this.style.borderColor='var(--accent)'"
+               onmouseout="this.style.borderColor='var(--accent3)'"
+             >${esc(n.title)}&thinsp;↗</a>`
+          : esc(n.title)}
+      </div>
+      ${n.desc ? `<div class="vtl-desc">${esc(n.desc)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function setRmSort(order) {
+  rmSortOrder = order;
+  renderRoadmapNodes();
+}
+
+function openRoadmapModal() {
+  document.getElementById('rm-node-overlay').classList.add('open');
+  document.getElementById('rm-title').focus();
+}
+
+function closeRoadmapModal() {
+  document.getElementById('rm-node-overlay').classList.remove('open');
+  ['rm-date','rm-title','rm-desc','rm-link'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('rm-status').value = 'doing';
+}
+
+function submitRoadmapNode() {
+  const title = document.getElementById('rm-title').value.trim();
+  if (!title) { document.getElementById('rm-title').focus(); return; }
+  const link = document.getElementById('rm-link').value.trim();
+  const nodes = RDB.get();
+  nodes.push({
+    status: document.getElementById('rm-status').value,
+    date:   document.getElementById('rm-date').value.trim() || '待完成',
+    title,
+    desc:   document.getElementById('rm-desc').value.trim(),
+    link:   link && /^https?:\/\//.test(link) ? link : '',
+  });
+  RDB.save(nodes);
+  renderRoadmapNodes();
+  closeRoadmapModal();
+}
+
+function deleteRoadmapNode(i) {
+  if (!confirm('确认删除这个节点？')) return;
+  const nodes = RDB.get();
+  nodes.splice(i, 1);
+  RDB.save(nodes);
+  renderRoadmapNodes();
+}
+
+/* Projects */
+const PDB = {
+  get:  () => JSON.parse(localStorage.getItem('zhm_projects') || '[]'),
+  save: v  => localStorage.setItem('zhm_projects', JSON.stringify(v)),
+};
+
+const STATUS_LABEL = { active:'进行中', done:'已完成', paused:'已暂停' };
+
+function renderProjects() {
+  const items = PDB.get();
+  const grid  = document.getElementById('proj-grid');
+  if (!items.length) {
+    grid.innerHTML = `<div style="color:var(--ink4);font-size:13px;padding:8px 0;font-family:var(--mono);">还没有项目，点击下方按钮添加第一个 →</div>`;
+    return;
+  }
+  grid.innerHTML = items.map((p, i) => {
+    const tags = (p.tags || '').split(',').map(t => t.trim()).filter(Boolean);
+    const hasLink = p.link && /^https?:\/\//.test(p.link);
+    return `
+      <div class="proj-card">
+        <button class="proj-delete" onclick="deleteProject(${i})" title="删除">✕</button>
+        <div class="proj-header">
+          ${hasLink
+            ? `<a class="proj-name" href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.name)}</a>`
+            : `<span class="proj-name">${esc(p.name)}</span>`}
+          <span class="proj-status ${esc(p.status)}">${STATUS_LABEL[p.status] || p.status}</span>
+        </div>
+        ${p.desc ? `<div class="proj-desc">${esc(p.desc)}</div>` : ''}
+        ${tags.length ? `<div class="proj-tags">${tags.map(t => `<span class="proj-tag">${esc(t)}</span>`).join('')}</div>` : ''}
+        <div class="proj-footer">
+          <span class="proj-date">${esc(p.date || '')}</span>
+          ${hasLink ? `<a class="proj-link" href="${esc(p.link)}" target="_blank" rel="noopener">查看项目 ↗</a>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openProjModal() {
+  document.getElementById('proj-modal-overlay').classList.add('open');
+  document.getElementById('proj-name').focus();
+}
+
+function closeProjModal() {
+  document.getElementById('proj-modal-overlay').classList.remove('open');
+  ['proj-name','proj-desc','proj-tags','proj-link','proj-date'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('proj-status').value = 'active';
+}
+
+function submitProject() {
+  const name = document.getElementById('proj-name').value.trim();
+  if (!name) { document.getElementById('proj-name').focus(); return; }
+  const link = document.getElementById('proj-link').value.trim();
+  const items = PDB.get();
+  items.push({
+    name,
+    status: document.getElementById('proj-status').value,
+    desc:   document.getElementById('proj-desc').value.trim(),
+    tags:   document.getElementById('proj-tags').value.trim(),
+    link:   link && /^https?:\/\//.test(link) ? link : '',
+    date:   document.getElementById('proj-date').value.trim(),
+  });
+  PDB.save(items);
+  renderProjects();
+  closeProjModal();
+}
+
+function deleteProject(i) {
+  if (!confirm('确认删除这个项目？')) return;
+  const items = PDB.get();
+  items.splice(i, 1);
+  PDB.save(items);
+  renderProjects();
+}
+
+/* Nav highlight */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+      const lnk = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if (lnk) lnk.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+['about','github','projects','roadmap','feed','notes'].forEach(id => { const el=document.getElementById(id); if(el) obs.observe(el); });
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+initGitHub();
+renderProjects();
+renderNotes();
+renderFeed();
+renderRoadmapNodes();
+</script>
+
+<!-- Roadmap Node Modal -->
+<div class="overlay" id="rm-node-overlay" onclick="if(event.target===this)closeRoadmapModal()">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">添加学习节点</div>
+      <button class="modal-close" onclick="closeRoadmapModal()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:0;">
+      <div class="form-group">
+        <label class="form-label">状态</label>
+        <select class="form-select" id="rm-status">
+          <option value="done">✅ 已完成</option>
+          <option value="doing" selected>🔵 进行中</option>
+          <option value="todo">⭕ 待学习</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">时间节点</label>
+        <input class="form-input" id="rm-date" type="text"
+          placeholder="例：2025年6月 · 已完成" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">节点标题</label>
+        <input class="form-input" id="rm-title" type="text"
+          placeholder="例：计算机网络" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">描述（选填）</label>
+        <textarea class="form-textarea" id="rm-desc" rows="3"
+          placeholder="简要描述这个阶段的学习内容…" style="min-height:80px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">项目链接（选填）</label>
+        <input class="form-input" id="rm-link" type="url"
+          placeholder="https://github.com/… 填写后标题会变为可点击链接" />
+      </div>
+      <button class="btn-primary" onclick="submitRoadmapNode()">添加到路线</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Project Modal -->
+<div class="overlay" id="proj-modal-overlay" onclick="if(event.target===this)closeProjModal()">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">添加项目经历</div>
+      <button class="modal-close" onclick="closeProjModal()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:0;">
+      <div class="form-group">
+        <label class="form-label">项目名称</label>
+        <input class="form-input" id="proj-name" type="text" placeholder="例：个人主页 / 图书管理系统" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">状态</label>
+        <select class="form-select" id="proj-status">
+          <option value="active">🟢 进行中</option>
+          <option value="done">✅ 已完成</option>
+          <option value="paused">⏸ 已暂停</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">项目描述</label>
+        <textarea class="form-textarea" id="proj-desc" rows="3"
+          placeholder="简要介绍项目的功能、技术栈或你的角色…" style="min-height:80px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">技术标签（逗号分隔）</label>
+        <input class="form-input" id="proj-tags" type="text" placeholder="例：Java, Spring Boot, MySQL" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">项目链接（选填）</label>
+        <input class="form-input" id="proj-link" type="url" placeholder="https://github.com/…" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">时间（选填）</label>
+        <input class="form-input" id="proj-date" type="text" placeholder="例：2025年3月 – 至今" />
+      </div>
+      <button class="btn-primary" onclick="submitProject()">保存项目</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
